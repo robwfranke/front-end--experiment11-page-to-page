@@ -1,23 +1,36 @@
-.background {
-    min-height: 65vh;
+* {
+
+    box-sizing: border-box;
+}
+
+
+.invoer {
+
+    background-color: darkturquoise;
+
+
+}
+
+/*.img, button{*/
+
+/*    width: 200px;*/
+/*    height: 200px;*/
+/*    !*border-radius: 50%;*!*/
+/*    cursor: pointer;*/
+/*}*/
+
+.button {
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    border: none;
+    background: #fef289;
 }
 
-.container {
-    margin: auto;
-    width: 100%;
-    max-width: 200px;
-}
 
-.error {
-    color: red;
-    margin: 3px 0;
-}
-
-.imagePreview {
-    width: 100%;
+.plaatje {
+    width: 200px;
     height: 200px;
     display: flex;
     flex-direction: column;
@@ -25,21 +38,12 @@
     justify-content: center;
     text-align: center;
     border: 3px solid black;
-    border-radius: 50%;
+    border-radius: 30%;
 }
 
-.imagePreview input[type="file"]   {
-    display: none;
-}
+.plaatjeContainer {
+    width: 300px;
+    height: 300px;
 
-/*.imagePreview .customFileUpload {*/
-/*    color: #55d6d6;*/
-/*    padding: 6px 12px;*/
-/*    cursor: pointer;*/
-/*}*/
 
-button {
-    border: none;
-    outline: none;
-    margin: 10px;
 }

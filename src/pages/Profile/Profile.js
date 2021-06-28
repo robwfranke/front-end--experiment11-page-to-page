@@ -44,7 +44,9 @@ function Profile() {
     const [fileToUpload, setFileToUpload] = useState();
     const [nameFileToUpload, setNameFileToUpload] = useState()
     const [updateFiles, setupdateFiles] = useState(false)
+    const history = useHistory();
     const jwtToken = localStorage.getItem('token');
+
 
 
     // *******************UseEffect********************
@@ -222,29 +224,13 @@ function Profile() {
 
 
 
-    const history = useHistory();
-
-    const [imagePreview, setImagePreview] = useState(null);
-    const [error, setError] = useState(false);
-    console.log(imagePreview)
 
 
 
 
-    const handleImageChange = (e) => {
-        setError(false)
-        const selected = e.target.files[0];
-        const allowed_types = ["image/png", "image/jpeg", "image/jpg"];
-        if (selected && allowed_types.includes(selected.type)) {
-            let reader = new FileReader()
-            reader.onloadend = () => {
-                setImagePreview(reader.result);
-            };
-            reader.readAsDataURL(selected);
-        } else {
-            setError(true);
-        }
-    };
+
+
+
 
 
 
@@ -253,30 +239,7 @@ function Profile() {
 
         <>
             <div className={styles.background}>
-            {/*    <div className={styles.container}>*/}
-            {/*        {error && <p className={styles.error}>Dit type file wordt niet ondersteund </p>}*/}
-            {/*        <div*/}
-            {/*            className={styles.imagePreview}*/}
-            {/*            style={{background: imagePreview ? `url("${imagePreview}") no-repeat center/cover` : "#cae5d9"}}*/}
 
-            {/*        >*/}
-            {/*            {!imagePreview && (*/}
-            {/*                <>*/}
-            {/*                    <p>Voeg een foto toe</p>*/}
-            {/*                    <button>*/}
-            {/*                        <label htmlFor="fileUpload" className={styles.custumFileUpload}>*/}
-            {/*                            Kies File*/}
-            {/*                        </label>*/}
-            {/*                    </button>*/}
-            {/*                    <input type="file" id="fileUpload" onChange={handleImageChange}/>*/}
-            {/*                    <span>(jpg, jpeg or png)</span>*/}
-            {/*                </>*/}
-            {/*            )}*/}
-            {/*        </div>*/}
-            {/*        {imagePreview && (*/}
-            {/*            <button onClick={() => setImagePreview(null)}>Delete foto</button>*/}
-            {/*        )}*/}
-            {/*    </div>*/}
 
                 <div>
                     <h2>Gegevens:</h2>
@@ -300,7 +263,6 @@ function Profile() {
 
 
 
-            <h2>Poging01</h2>
             <h3>Message {message} aantal files{length}</h3>
 
 
