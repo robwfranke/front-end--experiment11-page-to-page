@@ -1,0 +1,45 @@
+.background {
+    min-height: 65vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container {
+    margin: auto;
+    width: 100%;
+    max-width: 200px;
+}
+
+.error {
+    color: red;
+    margin: 3px 0;
+}
+
+.imagePreview {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 3px solid black;
+    border-radius: 50%;
+}
+
+.imagePreview input[type="file"]   {
+    display: none;
+}
+
+/*.imagePreview .customFileUpload {*/
+/*    color: #55d6d6;*/
+/*    padding: 6px 12px;*/
+/*    cursor: pointer;*/
+/*}*/
+
+button {
+    border: none;
+    outline: none;
+    margin: 10px;
+}
