@@ -130,9 +130,11 @@ function Profile() {
 
                     "Content-type": "application/json",
                     Authorization: `Bearer ${jwtToken}`,
+
                     // ...formData.getHeaders()
 
                 },
+                // responseType: "
             });
 
 
@@ -209,7 +211,6 @@ function Profile() {
     // ***********************************************************
 
     function onSubmit() {
-
         console.log("IN onSubmit")
         console.log("NameFileToUpload: ", nameFileToUpload)
         console.log("FileToUpload: ", fileToUpload)
