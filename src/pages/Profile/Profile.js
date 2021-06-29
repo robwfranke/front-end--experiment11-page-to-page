@@ -9,30 +9,6 @@ import jwt_decode from "jwt-decode";
 
 function Profile() {
 
-    const token = localStorage.getItem('token');
-    const decoded = jwt_decode(token);
-    const user = decoded.sub;
-
-    const {role}=useContext(AuthContext);
-    const {email}=useContext(AuthContext);
-    const{street}=useContext(AuthContext);
-    const{city}=useContext(AuthContext);
-    const{postalcode}=useContext(AuthContext);
-    const{telnumber}=useContext(AuthContext);
-    // const {addresses}=useContext(AuthContext);
-
-
-    console.log("Profile page role: ",role)
-    console.log("Profile Page mail: ",email)
-    console.log("Profile Page straat: ",street)
-    console.log("Profile Page stad: ",city)
-    console.log("Profile Page pc: ",postalcode)
-    console.log("Profile Page tel: ",telnumber)
-    console.log("user: ",user)
-
-
-
-
     const {handleSubmit} = useForm();
     const [message, setMessage] = useState();
     const [fileInfos, setFileInfos] = useState([]);
@@ -44,9 +20,6 @@ function Profile() {
     const [fileToUpload, setFileToUpload] = useState();
     const [nameFileToUpload, setNameFileToUpload] = useState()
     const [updateFiles, setupdateFiles] = useState(false)
-    const history = useHistory();
-    const jwtToken = localStorage.getItem('token');
-
 
 
     // *******************UseEffect********************
@@ -68,8 +41,6 @@ function Profile() {
     }, [updateFiles]);
 
 
-
-
     // ***********************************************************
 
     function keepName(file) {
@@ -84,22 +55,16 @@ function Profile() {
     }
     // ***********************************************************
 
-
-
-
-    // ***********************************************************
-
-
-
     async function deletePicture() {
         setFileUrl("")
         setShowFileFromKeepName(false)
         console.log("FILE ID:", fileID)
         try {
-            const response = await axios.delete(`http://localhost:8080/files/delete/${fileID}`, {
+
+            const response = await axios.delete(`http://localhost:8080/file/files/${fileID}`, {
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${jwtToken}`, /*BACK TICK!!!!!*/
+                    // Authorization: `Bearer ${jwtToken}`, /*BACK TICK!!!!!*/
                 }
             })
             setupdateFiles(true)
@@ -114,36 +79,12 @@ function Profile() {
     }
 
 
-    // ***********************************************************
-
-
-    // ***********************************************************
-
     async function getFilesFromBackend() {
 
         try {
             console.log("IN getFilesFromBackend")
 
-            const response = await axios.get("http://localhost:8080/files/getfiles", {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-
-                    "Content-type": "application/json",
-                    Authorization: `Bearer ${jwtToken}`,
-
-                    // ...formData.getHeaders()
-
-                },
-                // responseType: "
-            });
-
-
-
-
-
-
-
-
+            const response = await axios.get("http://localhost:8080/file/files")
 
 
             setMessage("Files goed opgehaald uit de backend")
@@ -158,8 +99,6 @@ function Profile() {
 
 
     }
-
-    // ***********************************************************
 
 
     async function sendFileToBackend() {
@@ -180,19 +119,14 @@ function Profile() {
             console.log("FormData:", formData)
 
 
-            const response = await axios.post("http://localhost:8080/files/upload", formData, {
+            const response = await axios.post("http://localhost:8080/file/upload", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
 
                     "Content-type": "application/json",
-                    Authorization: `Bearer ${jwtToken}`,
-                    // ...formData.getHeaders()
 
                 },
             });
-
-
-
 
             setupdateFiles(true)
             console.log("response", response)
@@ -205,12 +139,9 @@ function Profile() {
 
     }
 
-    // ***********************************************************
-
-
-    // ***********************************************************
 
     function onSubmit() {
+
         console.log("IN onSubmit")
         console.log("NameFileToUpload: ", nameFileToUpload)
         console.log("FileToUpload: ", fileToUpload)
@@ -218,52 +149,9 @@ function Profile() {
     }
 
 
-    // ***********************************************************
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     return (
-
-
         <>
-            <div className={styles.background}>
-
-
-                <div>
-                    <h2>Gegevens:</h2>
-                    <p><strong>UserName: </strong>{user}</p>
-
-                    <p><strong>Email: </strong>{email}</p>
-                    <p><strong>Stad: </strong>{city}</p>
-                    <p><strong>Straat: </strong>{street}</p>
-
-                    <p><strong>Post code: </strong>{postalcode}</p>
-                    <p><strong>Tel. nummer </strong>{telnumber}</p>
-
-
-
-
-
-
-                </div>
-            </div>
-
-
-
-
+            <h2>Poging01</h2>
             <h3>Message {message} aantal files{length}</h3>
 
 
@@ -284,7 +172,6 @@ function Profile() {
                         />
                         <button
                             type="submit"
-
                         >
                             SAVE!
                         </button>
@@ -293,6 +180,7 @@ function Profile() {
 
 
             </fieldset>
+
 
             {showFileFromKeepName &&
             <div>fileName uit keepName: {fileName}
@@ -305,6 +193,8 @@ function Profile() {
 
             }
 
+
+            {/**************************************************************************************/}
 
             {fileInfos.length > 0 &&
             <fieldset>
@@ -326,6 +216,7 @@ function Profile() {
             </fieldset>
             }
 
+            {/**************************************************************************************/}
 
 
             {fileInfos.length > 0 &&
@@ -377,21 +268,9 @@ function Profile() {
             }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         </>
 
+    )
 
 
 
@@ -399,7 +278,7 @@ function Profile() {
 
 
 
-    );
+
 }
 
 export default Profile;
