@@ -10,8 +10,34 @@ import jwt_decode from "jwt-decode";
 function Profile() {
 
     const {handleSubmit} = useForm();
+
+    const token = localStorage.getItem('token');
+    const decoded = jwt_decode(token);
+    const user = decoded.sub;
+
+    const {role}=useContext(AuthContext);
+    const {email}=useContext(AuthContext);
+    const{street}=useContext(AuthContext);
+    const{city}=useContext(AuthContext);
+    const{postalcode}=useContext(AuthContext);
+    const{telnumber}=useContext(AuthContext);
+
+    console.log("Profile page role: ",role)
+    console.log("Profile Page mail: ",email)
+    console.log("Profile Page straat: ",street)
+    console.log("Profile Page stad: ",city)
+    console.log("Profile Page pc: ",postalcode)
+    console.log("Profile Page tel: ",telnumber)
+    console.log("user: ",user)
+
+
+
+
+
+
+    // const {handleSubmit} = useForm();
     const [message, setMessage] = useState();
-    const [fileInfos, setFileInfos] = useState([]);
+    const [imagesFromBackend, setImageFromBackend] = useState([]);
     const [length, setLength] = useState(0);
     const [fileName, setFileName] = useState();
     const [fileUrl, setFileUrl] = useState()
@@ -89,7 +115,7 @@ function Profile() {
 
             setMessage("Files goed opgehaald uit de backend")
             setLength(response.data.length);
-            setFileInfos(response.data);
+            setImageFromBackend(response.data);
 
 
         } catch (e) {
@@ -151,7 +177,49 @@ function Profile() {
 
     return (
         <>
-            <h2>Poging01</h2>
+
+        <div className={styles.background}>
+
+
+            <h2>Profile Page</h2>
+
+
+        <div>
+            <p><strong>Post code: </strong>{postalcode}</p>
+            <p><strong>Tel. nummer </strong>{telnumber}</p>
+
+            <h2>Gegevens:</h2>
+            <p><strong>UserName: </strong>{user}</p>
+
+            <p><strong>Email: </strong>{email}</p>
+            <p><strong>Stad: </strong>{city}</p>
+            <p><strong>Straat: </strong>{street}</p>
+
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <h3>Message {message} aantal files{length}</h3>
 
 
@@ -196,21 +264,21 @@ function Profile() {
 
             {/**************************************************************************************/}
 
-            {fileInfos.length > 0 &&
+            {imagesFromBackend.length > 0 &&
             <fieldset>
 
                 <h3>Hier komt eerste file te staan</h3>
-                <h4>{fileInfos[0].name}</h4>
-                <h4>{fileInfos[0].url}</h4>
-                <h4>{fileInfos[0].id}</h4>
+                <h4>{imagesFromBackend[0].name}</h4>
+                <h4>{imagesFromBackend[0].url}</h4>
+                <h4>{imagesFromBackend[0].id}</h4>
 
                 <div>
                     <img
                         className={styles.plaatje}
                         alt={"Eerste file in fileinfos"}
-                        src={fileInfos[0].url}
+                        src={imagesFromBackend[0].url}
                     />
-                    <h3>{fileInfos[0].name}</h3>
+                    <h3>{imagesFromBackend[0].name}</h3>
                 </div>
 
             </fieldset>
@@ -219,12 +287,12 @@ function Profile() {
             {/**************************************************************************************/}
 
 
-            {fileInfos.length > 0 &&
+            {imagesFromBackend.length > 0 &&
             <fieldset>
 
 
                 <ul>
-                    {fileInfos.map((file) => {
+                    {imagesFromBackend.map((file) => {
                             return <li key={file.url}>
                            <span
                                onClick={
