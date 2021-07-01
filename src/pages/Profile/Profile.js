@@ -1,4 +1,4 @@
-import React,{useState,useContext,useEffect} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {AuthContext} from "../../components/context/AuthContext";
 import axios from "axios";
 import {useForm} from 'react-hook-form';
@@ -15,43 +15,61 @@ function Profile() {
     const decoded = jwt_decode(token);
     const user = decoded.sub;
 
-    const {role}=useContext(AuthContext);
-    const {email}=useContext(AuthContext);
-    const{street}=useContext(AuthContext);
-    const{city}=useContext(AuthContext);
-    const{postalcode}=useContext(AuthContext);
-    const{telnumber}=useContext(AuthContext);
+    const {role} = useContext(AuthContext);
+    const {email} = useContext(AuthContext);
+    const {street} = useContext(AuthContext);
+    const {city} = useContext(AuthContext);
+    const {postalcode} = useContext(AuthContext);
+    const {telnumber} = useContext(AuthContext);
 
-    console.log("Profile page role: ",role)
-    console.log("Profile Page mail: ",email)
-    console.log("Profile Page straat: ",street)
-    console.log("Profile Page stad: ",city)
-    console.log("Profile Page pc: ",postalcode)
-    console.log("Profile Page tel: ",telnumber)
-    console.log("user: ",user)
-
-
+    console.log("Profile page role: ", role)
+    console.log("Profile Page mail: ", email)
+    console.log("Profile Page straat: ", street)
+    console.log("Profile Page stad: ", city)
+    console.log("Profile Page pc: ", postalcode)
+    console.log("Profile Page tel: ", telnumber)
+    console.log("user: ", user)
 
 
 
 
-    // const {handleSubmit} = useForm();
-    const [message, setMessage] = useState();
-    const [imagesFromBackend, setImageFromBackend] = useState([]);
+
+
+
+
+    const [errorSaveFile, setErrorSaveFile] = useState(false);
+    const [errorDeleteFile, setErrorDeleteFile] = useState(false);
+    const [errorGetFile, setErrorGetFile] = useState(false);/*als er tijd is dit toevoegen!*/
+    const [errorUpdateFile, setErrorUpdateFile] = useState(false);/*als er tijd is dit toevoegen!*/
+
+    const [allImages, setAllImages] = useState([]);
     const [length, setLength] = useState(0);
-    const [fileName, setFileName] = useState();
     const [fileUrl, setFileUrl] = useState()
     const [fileID, setFileID] = useState()
     const [showFileFromKeepName, setShowFileFromKeepName] = useState(false)
     const [fileToUpload, setFileToUpload] = useState();
     const [nameFileToUpload, setNameFileToUpload] = useState()
     const [updateFiles, setupdateFiles] = useState(false)
+    const [changeProfileData, setChangeProfileData] = useState(false)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     // *******************UseEffect********************
 
     useEffect(() => {
         getFilesFromBackend()
+
 
         // setupdateFiles(true)
     }, []);
@@ -67,20 +85,6 @@ function Profile() {
     }, [updateFiles]);
 
 
-    // ***********************************************************
-
-    function keepName(file) {
-
-        console.log("file in keepName: ", file)
-
-        setFileName(file.name)
-        setFileUrl(file.url);
-        setFileID(file.id);
-        setShowFileFromKeepName(true)
-
-    }
-    // ***********************************************************
-
     async function deletePicture() {
         setFileUrl("")
         setShowFileFromKeepName(false)
@@ -95,11 +99,16 @@ function Profile() {
             })
             setupdateFiles(true)
 
-            console.log("PLAATJE WEG")
-
 
         } catch (error) {
-            console.log("PLAATJE NIET WEG")
+
+
+            setErrorDeleteFile(true)
+            setTimeout(() => {
+                setErrorDeleteFile(false);
+            }, 3500);
+
+
         }
 
     }
@@ -112,15 +121,17 @@ function Profile() {
 
             const response = await axios.get("http://localhost:8080/file/files")
 
-
-            setMessage("Files goed opgehaald uit de backend")
             setLength(response.data.length);
-            setImageFromBackend(response.data);
+            setAllImages(response.data);
+            setFileID(response.data[0].id)
 
 
         } catch (e) {
-            setMessage("Upload Fout")
-            console.log("Er is iets fout gegaan bij het ophalen")
+
+
+            console.log("Geen image of verkeerd endpoint. Status moet nog")
+
+
         }
 
 
@@ -150,7 +161,6 @@ function Profile() {
                     "Content-Type": "multipart/form-data",
 
                     "Content-type": "application/json",
-
                 },
             });
 
@@ -158,13 +168,36 @@ function Profile() {
             console.log("response", response)
         } catch (error) {
 
-            console.log("Foutje bij het versturen naar backend")
-
+            setErrorSaveFile(true)
+            setTimeout(() => {
+                setErrorSaveFile(false);
+            }, 3500);
 
         }
 
     }
 
+    async function updateProfileDataToBackend(){
+        console.log("HIER ACTIE UPDATE PROFILE")
+
+        setChangeProfileData(false)
+    }
+
+
+    function showUpdateDataProfile() {
+        if (changeProfileData) {
+            setChangeProfileData(false)
+        } else {
+            setChangeProfileData(true)
+        }
+    }
+
+
+    function onSubmit() {
+
+
+        sendFileToBackend();
+    }
 
     function onSubmit() {
 
@@ -176,176 +209,174 @@ function Profile() {
 
 
     return (
-        <>
-
-        <div className={styles.background}>
-
-
-            <h2>Profile Page</h2>
-
-
-        <div>
-            <p><strong>Post code: </strong>{postalcode}</p>
-            <p><strong>Tel. nummer </strong>{telnumber}</p>
-
-            <h2>Gegevens:</h2>
-            <p><strong>UserName: </strong>{user}</p>
-
-            <p><strong>Email: </strong>{email}</p>
-            <p><strong>Stad: </strong>{city}</p>
-            <p><strong>Straat: </strong>{street}</p>
 
 
 
 
-
-
-        </div>
-    </div>
-
-
-
-
-
+        //     <h2>Profile Page</h2>
+        //
+        //
+        //
+        //
+        //     <div className={styles.alignUserdata}>
+        //
+        //
+        //         <div className={styles.userData}>
+        //
+        //             <fieldset>
+        //
+        //                 <h2>Gegevens:</h2>
+        //
+        //                 <p><strong>Post code: </strong>{postalcode}</p>
+        //                 <p><strong>Tel. nummer </strong>{telnumber}</p>
+        //
+        //
+        //                 <p><strong>UserName: </strong>{user}</p>
+        //
+        //                 <p><strong>Email: </strong>{email}</p>
+        //                 <p><strong>Stad: </strong>{city}</p>
+        //                 <p><strong>Straat: </strong>{street}</p>
+        //
+        //             </fieldset>
 
 
 
 
 
 
+            <div className={styles.container}>
+
+                {/*************  LEFT COlUMN   ***********/}
+
+                <div className={styles.item1}>Lorem ipsum dolor sit amet.
+                    nog meer text
+                    Naam: Robbie
+                    <button
+                        className={styles.button1}
+                        onClick={showUpdateDataProfile}
+                    >
+                        verander gegevens</button>
+
+
+                </div>
+
+
+                {/*************  CENTER COLUMN   ***********/}
+
+
+                <div className={styles.containerCenter}>
+
+                    {allImages.length > 0 &&
+                    <img
+                        className={styles.image}
+                        alt={"Eerste file in fileinfos"}
+                        src={allImages[0].url}
+                    />
+                    }
+
+
+                    {allImages.length === 0 &&
+                    <div>
+                        <form
+                            className={styles.onSubmit}
+                            onSubmit={handleSubmit(onSubmit)}>
+
+                            <input
+
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => setFileToUpload(e.target.files[0])}
+                            />
+
+
+                            <button
+                                type="submit"
+
+                            >
+                                SAVE!
+                            </button>
+                            {errorSaveFile &&
+
+                            <div className={styles.warning}>Er is iets fout gegaan bij het ophalen
+                                Probeer het nog een keer!
+                                Of neem contact op met ons.</div>
+
+                            }
+
+                        </form>
+
+
+                    </div>
+                    }
+
+                    {allImages.length > 0 &&
+                    <button
+                        onClick={deletePicture}
+                    >
+                        verwijder profiel foto
+                    </button>
+                    }
+
+                    {errorDeleteFile &&
+
+                    <div className={styles.warning}>Er is iets fout gegaan bij het verwijderen
+                        Probeer het nog een keer!
+                        Of neem contact op met ons.</div>
+
+                    }
 
 
 
 
+                </div>
 
 
+                {/*************  RIGHT COLUMN   ***********/}
 
-            <h3>Message {message} aantal files{length}</h3>
+                {changeProfileData &&
 
+                <div className={styles.item2}>
 
-            <fieldset>
+                    <div>
 
-                <div className={styles.invoer}>
-                    <h1>File kiezen en versturen naar Backend</h1>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <input
-                            type="text"
-                            onChange={(e) => setNameFileToUpload(e.target.value)}
-                        />
+                        <div>Lorem ipsum dolor sit amet.</div>
+                        <div>Naam:</div>
+                        <div>email:</div>
+                    </div>
 
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => setFileToUpload(e.target.files[0])}
-                        />
+                    <div>
+
                         <button
-                            type="submit"
+                            className={styles.button2}
+                            onClick={updateProfileDataToBackend}
+
                         >
-                            SAVE!
+                            Update!</button>
+
+
+                        <button
+                            className={styles.button2}
+                            onClick={showUpdateDataProfile}
+                        >
+                            cancel
                         </button>
-                    </form>
+
+
+                    </div>
+
+
                 </div>
+                }
 
-
-            </fieldset>
-
-
-            {showFileFromKeepName &&
-            <div>fileName uit keepName: {fileName}
-                <div>
-                    fileUrl uit keepName: {fileUrl}
-                    fileID uit keepName:{fileID}
-                </div>
 
             </div>
 
-            }
 
 
-            {/**************************************************************************************/}
-
-            {imagesFromBackend.length > 0 &&
-            <fieldset>
-
-                <h3>Hier komt eerste file te staan</h3>
-                <h4>{imagesFromBackend[0].name}</h4>
-                <h4>{imagesFromBackend[0].url}</h4>
-                <h4>{imagesFromBackend[0].id}</h4>
-
-                <div>
-                    <img
-                        className={styles.plaatje}
-                        alt={"Eerste file in fileinfos"}
-                        src={imagesFromBackend[0].url}
-                    />
-                    <h3>{imagesFromBackend[0].name}</h3>
-                </div>
-
-            </fieldset>
-            }
-
-            {/**************************************************************************************/}
 
 
-            {imagesFromBackend.length > 0 &&
-            <fieldset>
-
-
-                <ul>
-                    {imagesFromBackend.map((file) => {
-                            return <li key={file.url}>
-                           <span
-                               onClick={
-
-                                   () => keepName(file)}
-                           >naam bij opklikken worden de gegevens doorgestuurd naar keepName: <h3>{file.name}</h3>
-                           </span>
-                            </li>
-                        }
-                    )}
-                </ul>
-
-                <div>
-
-                    {showFileFromKeepName &&
-                    <fieldset className={styles.plaatjeContainer}>
-
-
-                        <img
-                            className={styles.plaatje}
-                            alt={"Eerste file in fileinfos"}
-
-                            src={fileUrl}
-                        />
-                        <h3>{fileName}</h3>
-                        <button
-                            onClick={deletePicture}
-                        >
-                            delete plaatje
-                        </button>
-
-
-                    </fieldset>
-                    }
-
-                </div>
-
-
-            </fieldset>
-
-            }
-
-
-        </>
 
     )
-
-
-
-
-
-
-
 
 }
 
