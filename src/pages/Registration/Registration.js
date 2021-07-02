@@ -34,7 +34,7 @@ function Registration() {
         try{
 
 
-            const response = await axios.post("http://localhost:8080/createCustomerWithAddress", data);
+            const response = await axios.post("http://localhost:8080/customers", data);
             console.log("respons =", response)
             setRegistrated(true);
 
