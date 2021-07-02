@@ -31,12 +31,6 @@ function Profile() {
     console.log("user: ", user)
 
 
-
-
-
-
-
-
     const [errorSaveFile, setErrorSaveFile] = useState(false);
     const [errorDeleteFile, setErrorDeleteFile] = useState(false);
     const [errorGetFile, setErrorGetFile] = useState(false);/*als er tijd is dit toevoegen!*/
@@ -51,18 +45,6 @@ function Profile() {
     const [nameFileToUpload, setNameFileToUpload] = useState()
     const [updateFiles, setupdateFiles] = useState(false)
     const [changeProfileData, setChangeProfileData] = useState(false)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     // *******************UseEffect********************
@@ -89,9 +71,10 @@ function Profile() {
         setFileUrl("")
         setShowFileFromKeepName(false)
         console.log("FILE ID:", fileID)
+        console.log("FILE URL:", fileUrl)
         try {
 
-            const response = await axios.delete(`http://localhost:8080/file/files/${fileID}`, {
+            const response = await axios.delete(`http://localhost:8080/files/delete/${fileID}`, {
                 headers: {
                     "Content-Type": "application/json",
                     // Authorization: `Bearer ${jwtToken}`, /*BACK TICK!!!!!*/
@@ -119,7 +102,7 @@ function Profile() {
         try {
             console.log("IN getFilesFromBackend")
 
-            const response = await axios.get("http://localhost:8080/file/files")
+            const response = await axios.get("http://localhost:8080/files/files")
 
             setLength(response.data.length);
             setAllImages(response.data);
@@ -131,7 +114,7 @@ function Profile() {
 
             console.log("Geen image of verkeerd endpoint. Status moet nog")
 
-
+            console.log("excption:",e)
         }
 
 
@@ -156,7 +139,7 @@ function Profile() {
             console.log("FormData:", formData)
 
 
-            const response = await axios.post("http://localhost:8080/file/upload", formData, {
+            const response = await axios.post("http://localhost:8080/files/upload", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
 
@@ -177,7 +160,7 @@ function Profile() {
 
     }
 
-    async function updateProfileDataToBackend(){
+    async function updateProfileDataToBackend() {
         console.log("HIER ACTIE UPDATE PROFILE")
 
         setChangeProfileData(false)
@@ -193,11 +176,6 @@ function Profile() {
     }
 
 
-    function onSubmit() {
-
-
-        sendFileToBackend();
-    }
 
     function onSubmit() {
 
@@ -213,170 +191,167 @@ function Profile() {
 
 
 
-        //     <h2>Profile Page</h2>
-        //
-        //
-        //
-        //
-        //     <div className={styles.alignUserdata}>
-        //
-        //
-        //         <div className={styles.userData}>
-        //
-        //             <fieldset>
-        //
-        //                 <h2>Gegevens:</h2>
-        //
-        //                 <p><strong>Post code: </strong>{postalcode}</p>
-        //                 <p><strong>Tel. nummer </strong>{telnumber}</p>
-        //
-        //
-        //                 <p><strong>UserName: </strong>{user}</p>
-        //
-        //                 <p><strong>Email: </strong>{email}</p>
-        //                 <p><strong>Stad: </strong>{city}</p>
-        //                 <p><strong>Straat: </strong>{street}</p>
-        //
-        //             </fieldset>
+<>
+        <div>
+
+            <h2>Profile Page</h2>
+        </div>
 
 
+    <div className={styles.container}>
 
 
+        {/*************  LEFT COlUMN   ***********/}
+
+        <div className={styles.leftColumn}>
 
 
-            <div className={styles.container}>
+            <div className={styles.profile}>
+                <h3>Profiel gegevens:</h3>
+                <div><strong>UserName: </strong>{user}</div>
+                <div><strong>Stad: </strong>{city}</div>
 
-                {/*************  LEFT COlUMN   ***********/}
+                <div><strong>Straat (nr): </strong>{street}</div>
 
-                <div className={styles.item1}>Lorem ipsum dolor sit amet.
-                    nog meer text
-                    Naam: Robbie
-                    <button
-                        className={styles.button1}
-                        onClick={showUpdateDataProfile}
-                    >
-                        verander gegevens</button>
-
-
-                </div>
-
-
-                {/*************  CENTER COLUMN   ***********/}
-
-
-                <div className={styles.containerCenter}>
-
-                    {allImages.length > 0 &&
-                    <img
-                        className={styles.image}
-                        alt={"Eerste file in fileinfos"}
-                        src={allImages[0].url}
-                    />
-                    }
-
-
-                    {allImages.length === 0 &&
-                    <div>
-                        <form
-                            className={styles.onSubmit}
-                            onSubmit={handleSubmit(onSubmit)}>
-
-                            <input
-
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => setFileToUpload(e.target.files[0])}
-                            />
-
-
-                            <button
-                                type="submit"
-
-                            >
-                                SAVE!
-                            </button>
-                            {errorSaveFile &&
-
-                            <div className={styles.warning}>Er is iets fout gegaan bij het ophalen
-                                Probeer het nog een keer!
-                                Of neem contact op met ons.</div>
-
-                            }
-
-                        </form>
-
-
-                    </div>
-                    }
-
-                    {allImages.length > 0 &&
-                    <button
-                        onClick={deletePicture}
-                    >
-                        verwijder profiel foto
-                    </button>
-                    }
-
-                    {errorDeleteFile &&
-
-                    <div className={styles.warning}>Er is iets fout gegaan bij het verwijderen
-                        Probeer het nog een keer!
-                        Of neem contact op met ons.</div>
-
-                    }
-
-
-
-
-                </div>
-
-
-                {/*************  RIGHT COLUMN   ***********/}
-
-                {changeProfileData &&
-
-                <div className={styles.item2}>
-
-                    <div>
-
-                        <div>Lorem ipsum dolor sit amet.</div>
-                        <div>Naam:</div>
-                        <div>email:</div>
-                    </div>
-
-                    <div>
-
-                        <button
-                            className={styles.button2}
-                            onClick={updateProfileDataToBackend}
-
-                        >
-                            Update!</button>
-
-
-                        <button
-                            className={styles.button2}
-                            onClick={showUpdateDataProfile}
-                        >
-                            cancel
-                        </button>
-
-
-                    </div>
-
-
-                </div>
-                }
+                <div><strong>Post code: </strong>{postalcode}</div>
+                <div><strong>Email: </strong>{email}</div>
+                <div><strong>Tel. nummer </strong>{telnumber}</div>
 
 
             </div>
 
 
 
+            <button
+                className={styles.button1}
+                onClick={showUpdateDataProfile}
+            >
+                verander gegevens</button>
+
+
+        </div>
+
+
+        {/*************  CENTER COLUMN   ***********/}
+
+
+        <div className={styles.centerColumn}>
 
 
 
-    )
+            {allImages.length > 0 &&
+
+                <>
+            <div>{allImages[0].url}</div>
+
+
+            <img
+                className={styles.image}
+                alt={"Profiel foto"}
+                src={allImages[0].url}
+            />
+
+                </>
+            }
+
+
+            {allImages.length === 0 &&
+            <div>
+                <form
+                    className={styles.onSubmit}
+                    onSubmit={handleSubmit(onSubmit)}>
+
+                    <input
+
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setFileToUpload(e.target.files[0])}
+                    />
+
+
+                    <button
+                        type="submit"
+
+                    >
+                        SAVE!
+                    </button>
+                    {errorSaveFile &&
+
+                    <div className={styles.warning}>Er is iets fout gegaan bij het ophalen
+                        Probeer het nog een keer!
+                        Of neem contact op met ons.</div>
+
+                    }
+
+                </form>
+
+
+            </div>
+            }
+
+            {allImages.length > 0 &&
+            <button
+                onClick={deletePicture}
+            >
+                verwijder profiel foto
+            </button>
+            }
+
+            {errorDeleteFile &&
+
+            <div className={styles.warning}>Er is iets fout gegaan bij het verwijderen
+                Probeer het nog een keer!
+                Of neem contact op met ons.</div>
+
+            }
+
+
+        </div>
+
+
+        {/*************  RIGHT COLUMN   ***********/}
+
+        {changeProfileData &&
+
+        <div className={styles.rightColumn}>
+
+            <div>
+
+                <div>Lorem ipsum dolor sit amet.</div>
+                <div>Naam:</div>
+                <div>email:</div>
+            </div>
+
+            <div>
+
+                <button
+                    className={styles.button2}
+                    onClick={updateProfileDataToBackend}
+
+                >
+                    Update!
+                </button>
+
+
+                <button
+                    className={styles.button2}
+                    onClick={showUpdateDataProfile}
+                >
+                    cancel
+                </button>
+
+
+            </div>
+
+
+        </div>
+        }
+
+
+    </div>
+</>
+
+)
 
 }
 
