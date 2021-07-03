@@ -9,8 +9,8 @@ import axios from "axios";
 function Registration() {
     const {register, handleSubmit, formState: {errors}} = useForm();
     const history = useHistory();
-    const [error,setError]=useState(false)
-    const [registrated,setRegistrated]=useState(false);
+    const [error, setError] = useState(false)
+    const [registrated, setRegistrated] = useState(false);
 
 
     async function onSubmit(data) {
@@ -26,12 +26,10 @@ function Registration() {
         data.postalcode = data.postalcode.replace(/\s+/g, '');
 
         //strip alle niet nummerieke karakters.
-        data.telnumber=data.telnumber.replace(/[^\d]/g, '');
+        data.telnumber = data.telnumber.replace(/[^\d]/g, '');
 
 
-
-
-        try{
+        try {
 
 
             const response = await axios.post("http://localhost:8080/customers", data);
@@ -43,12 +41,7 @@ function Registration() {
             }, 4000);
 
 
-
-
-
-
-
-        }catch (error){
+        } catch (error) {
             console.log("foutje in registratie")
             setError(true)
             console.error(error);
@@ -60,7 +53,6 @@ function Registration() {
     return (
 
         <>
-
 
 
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -91,7 +83,7 @@ function Registration() {
                             type="password"
                             placeholder="min 8 karakters"
                             {...register("password", {
-                                required:true,
+                                required: true,
                                 minLength: {
                                     value: 8,
                                 }
@@ -110,7 +102,7 @@ function Registration() {
                             placeholder="vb. naam@nogwat.nl"
                             {...register("email", {
                                 required: true,
-                                pattern:/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i,
+                                pattern: /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i,
                             })}
                         />
                         {errors.email && (
@@ -173,7 +165,6 @@ function Registration() {
                     </label>
 
 
-
                     <label htmlFor="telephone-field">
                         Telefoonnummer:
                         <input
@@ -212,8 +203,6 @@ function Registration() {
                     }
 
                 </fieldset>
-
-
 
 
             </form>

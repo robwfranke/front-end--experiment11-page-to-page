@@ -75,7 +75,7 @@ function CustomerOrder(CustomerUpdatePage) {
     async function deleteItem(itemName) {
 
 
-        console.log("deleteItem", itemName)
+        console.log("deleteItem CUSTOMERORDER", itemName)
 
         try {
 
@@ -416,7 +416,7 @@ function CustomerOrder(CustomerUpdatePage) {
         onClick={() => deleteItem(item.itemname)}
         type="text"
     >
-        Delete
+        Delete Item
     </button>
         }
 </div>
