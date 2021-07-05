@@ -7,16 +7,8 @@ import jwt_decode from "jwt-decode";
 import {AuthContext} from "../../components/context/AuthContext";
 
 
-
-
-
-
-
-
 function ProfielImage() {
     const {register, handleSubmit, formState: {errors}} = useForm();
-
-
 
 
     const token = localStorage.getItem('token');
@@ -32,8 +24,6 @@ function ProfielImage() {
     const [errorUpdateFile, setErrorUpdateFile] = useState(false);/*als er tijd is dit toevoegen!*/
 
 
-
-
     const [allImages, setAllImages] = useState([]);
     const [length, setLength] = useState(0);
     const [fileUrl, setFileUrl] = useState()
@@ -44,7 +34,6 @@ function ProfielImage() {
     const [updateFiles, setupdateFiles] = useState(false)
 
 
-
     useEffect(() => {
         getFilesFromBackend()
 
@@ -52,7 +41,6 @@ function ProfielImage() {
         // setupdateFiles(true)
     }, []);
 
-    //
     useEffect(() => {
         console.log("UseEffect updateFiles")
         if (updateFiles) {
@@ -61,12 +49,6 @@ function ProfielImage() {
         }
 
     }, [updateFiles]);
-
-
-
-
-
-
 
     async function deletePicture() {
         setFileUrl("")
@@ -97,7 +79,6 @@ function ProfielImage() {
 
     }
 
-
     async function getFilesFromBackend() {
 
         try {
@@ -120,19 +101,6 @@ function ProfielImage() {
 
 
     }
-
-
-
-
-    function onSubmit() {
-
-        console.log("IN onSubmit")
-        console.log("NameFileToUpload: ", nameFileToUpload)
-        console.log("FileToUpload: ", fileToUpload)
-        sendFileToBackend();
-    }
-
-
 
     async function sendFileToBackend() {
 
@@ -174,88 +142,88 @@ function ProfielImage() {
     }
 
 
+    function onSubmit() {
+
+        console.log("IN onSubmit")
+        console.log("NameFileToUpload: ", nameFileToUpload)
+        console.log("FileToUpload: ", fileToUpload)
+        sendFileToBackend();
+    }
 
 
+    return (
 
 
+        <>
 
-    return(
+            {allImages.length === 0 &&
+            <>
+                <form
+                    key={1}
+                    className={styles.onSubmit}
+                    onSubmit={handleSubmit(onSubmit)}>
 
+                    <input
 
-                <>
-
-
-                    {allImages.length > 0 &&
-
-                    <>
-                        <img
-                            className={styles.image}
-                            alt={"Profiel foto"}
-                            src={allImages[0].url}
-                        />
-
-                    </>
-                    }
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setFileToUpload(e.target.files[0])}
+                    />
 
 
-                    {allImages.length === 0 &&
-                    <div>
-                        <form
-                            key={1}
-                            className={styles.onSubmit}
-                            onSubmit={handleSubmit(onSubmit)}>
-
-                            <input
-
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => setFileToUpload(e.target.files[0])}
-                            />
-
-
-                            <button
-                                type="submit"
-
-                            >
-                                SAVE!
-                            </button>
-                            {errorSaveFile &&
-
-                            <div className={styles.warning}>Er is iets fout gegaan bij het ophalen
-                                Probeer het nog een keer!
-                                Of neem contact op met ons.</div>
-
-                            }
-
-                        </form>
-
-
-                    </div>
-                    }
-
-
-
-                    {allImages.length > 0 &&
                     <button
-                        onClick={deletePicture}
+                        type="submit"
+
                     >
-                        verwijder profiel foto
+                        SAVE!
                     </button>
-                    }
+                    {errorSaveFile &&
 
-
-                    {errorDeleteFile &&
-
-                    <div className={styles.warning}>Er is iets fout gegaan bij het verwijderen
+                    <div className={styles.warning}>Er is iets fout gegaan bij het ophalen
                         Probeer het nog een keer!
                         Of neem contact op met ons.</div>
 
                     }
 
+                </form>
 
 
+            </>
+            }
+
+            {allImages.length > 0 &&
+            <>
+                <img
+                    className={styles.image}
+                    alt={"Profiel foto"}
+                    src={allImages[0].url}
+                />
+            </>
+            }
+
+            {allImages.length > 0 &&
+                <>
+            <button
+                onClick={deletePicture}
+            >
+                verwijder profiel foto
+            </button>
                 </>
-        // }
+
+            }
+
+
+            {errorDeleteFile &&
+
+            <div className={styles.warning}>Er is iets fout gegaan bij het verwijderen
+                Probeer het nog een keer!
+                Of neem contact op met ons.</div>
+
+            }
+
+
+        </>
+
     )
 }
 
