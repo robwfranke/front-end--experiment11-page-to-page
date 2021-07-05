@@ -5,6 +5,9 @@ import {useForm} from 'react-hook-form';
 import {Link, useHistory} from 'react-router-dom';
 import styles from "./Profile.module.css"
 import jwt_decode from "jwt-decode";
+import ProfileData from "./ProfileData";
+import ProfileImage from "./ProfileImage";
+import ProfileUpdate from "./ProfileUpdate";
 
 
 function Profile() {
@@ -17,15 +20,10 @@ function Profile() {
     } = useForm();
 
     const token = localStorage.getItem('token');
+    console.log("TOKEN IN PROFILE.js", token)
     const decoded = jwt_decode(token);
     const user = decoded.sub;
 
-    const {role} = useContext(AuthContext);
-    const {email} = useContext(AuthContext);
-    const {street} = useContext(AuthContext);
-    const {city} = useContext(AuthContext);
-    const {postalcode} = useContext(AuthContext);
-    const {telnumber} = useContext(AuthContext);
 
 
     const[newEmail,setNewEmail]=useState("")
@@ -34,150 +32,11 @@ function Profile() {
     const[newPostalcode,setnewPostalcode]=useState("")
     const[newTelnumber,setnewTelnumber]=useState("")
 
-    console.log("Profile page role: ", role)
-    console.log("Profile Page mail: ", email)
-    console.log("Profile Page straat: ", street)
-    console.log("Profile Page stad: ", city)
-    console.log("Profile Page pc: ", postalcode)
-    console.log("Profile Page tel: ", telnumber)
-    console.log("user: ", user)
 
 
-    const [errorSaveFile, setErrorSaveFile] = useState(false);
-    const [errorDeleteFile, setErrorDeleteFile] = useState(false);
-    const [errorGetFile, setErrorGetFile] = useState(false);/*als er tijd is dit toevoegen!*/
-    const [errorUpdateFile, setErrorUpdateFile] = useState(false);/*als er tijd is dit toevoegen!*/
-
-    const [allImages, setAllImages] = useState([]);
-    const [length, setLength] = useState(0);
-    const [fileUrl, setFileUrl] = useState()
-    const [fileID, setFileID] = useState()
-    const [showFileFromKeepName, setShowFileFromKeepName] = useState(false)
-    const [fileToUpload, setFileToUpload] = useState();
-    const [nameFileToUpload, setNameFileToUpload] = useState()
-    const [updateFiles, setupdateFiles] = useState(false)
     const [changeProfileData, setChangeProfileData] = useState(false)
    const {errorSubmit2,setErrorSubmit2}=useState(false);
 
-
-    // *******************UseEffect********************
-
-    useEffect(() => {
-        getFilesFromBackend()
-
-
-        // setupdateFiles(true)
-    }, []);
-
-    //
-    useEffect(() => {
-        console.log("UseEffect updateFiles")
-        if (updateFiles) {
-            getFilesFromBackend()
-            setupdateFiles(false)
-        }
-
-    }, [updateFiles]);
-
-
-    async function deletePicture() {
-        setFileUrl("")
-        setShowFileFromKeepName(false)
-        console.log("FILE ID:", fileID)
-        console.log("FILE URL:", fileUrl)
-        try {
-
-            const response = await axios.delete(`http://localhost:8080/files/${fileID}`, {
-                headers: {
-                    "Content-Type": "application/json",
-                    // Authorization: `Bearer ${jwtToken}`, /*BACK TICK!!!!!*/
-                }
-            })
-            setupdateFiles(true)
-
-
-        } catch (error) {
-
-
-            setErrorDeleteFile(true)
-            setTimeout(() => {
-                setErrorDeleteFile(false);
-            }, 3500);
-
-
-        }
-
-    }
-
-
-    async function getFilesFromBackend() {
-
-        try {
-            console.log("IN getFilesFromBackend")
-
-            const response = await axios.get("http://localhost:8080/files")
-
-            setLength(response.data.length);
-            setAllImages(response.data);
-            setFileID(response.data[0].id)
-
-
-        } catch (e) {
-
-
-            console.log("Geen image of verkeerd endpoint. Status moet nog")
-
-            console.log("excption:", e)
-        }
-
-
-    }
-
-
-    async function sendFileToBackend() {
-
-        console.log("IN sendFileToBackend() ")
-        console.log("NameFileToUpload: ", nameFileToUpload)
-        console.log("FileToUpload: ", fileToUpload)
-
-
-        try {
-            let formData = new FormData()
-
-            console.log("TRY fileToUpload:", fileToUpload)
-
-            // LET OP!!!! name: "file"  DIT MOET DUS "file" blijven
-            formData.append("file", fileToUpload);
-
-            console.log("FormData:", formData)
-
-
-            const response = await axios.post("http://localhost:8080/files", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-
-                    "Content-type": "application/json",
-                },
-            });
-
-            setupdateFiles(true)
-            console.log("response", response)
-        } catch (error) {
-
-            setErrorSaveFile(true)
-            setTimeout(() => {
-                setErrorSaveFile(false);
-            }, 3500);
-
-        }
-
-    }
-
-    async function updateProfileDataToBackend() {
-        console.log("HIER ACTIE UPDATE PROFILE")
-
-        setChangeProfileData(false)
-    }
 
 
     function showUpdateDataProfile() {
@@ -187,16 +46,6 @@ function Profile() {
             setChangeProfileData(true)
         }
     }
-
-
-    function onSubmit1() {
-
-        console.log("IN onSubmit")
-        console.log("NameFileToUpload: ", nameFileToUpload)
-        console.log("FileToUpload: ", fileToUpload)
-        sendFileToBackend();
-    }
-
 
 
     function onSubmit2(data) {
@@ -219,25 +68,11 @@ function Profile() {
             <div className={styles.container}>
 
 
-                {/*************  LEFT COlUMN   ***********/}
+                {/************* PROFILE DATA   ***********/}
 
                 <div className={styles.leftColumn}>
 
-
-                    <div className={styles.profile}>
-                        <h3>Profiel gegevens:</h3>
-                        <div><strong>UserName: </strong>{user}</div>
-                        <div><strong>Stad: </strong>{city}</div>
-
-                        <div><strong>Straat (nr): </strong>{street}</div>
-
-                        <div><strong>Post code: </strong>{postalcode}</div>
-                        <div><strong>Email: </strong>{email}</div>
-                        <div><strong>Tel. nummer </strong>{telnumber}</div>
-
-
-                    </div>
-
+                    <ProfileData/>
 
                     <button
                         className={styles.button1}
@@ -250,77 +85,14 @@ function Profile() {
                 </div>
 
 
-                {/*************  CENTER COLUMN   ***********/}
+                {/*************  PROFILE IMAGE   ***********/}
 
 
                 <div className={styles.centerColumn}>
 
 
-                    {allImages.length > 0 &&
+                    <ProfileImage/>
 
-                    <>
-
-
-                        <img
-                            className={styles.image}
-                            alt={"Profiel foto"}
-                            src={allImages[0].url}
-                        />
-
-                    </>
-                    }
-
-
-                    {allImages.length === 0 &&
-                    <div>
-                        <form
-                            key={1}
-                            className={styles.onSubmit}
-                            onSubmit={handleSubmit(onSubmit1)}>
-
-                            <input
-
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => setFileToUpload(e.target.files[0])}
-                            />
-
-
-                            <button
-                                type="submit"
-
-                            >
-                                SAVE!
-                            </button>
-                            {errorSaveFile &&
-
-                            <div className={styles.warning}>Er is iets fout gegaan bij het ophalen
-                                Probeer het nog een keer!
-                                Of neem contact op met ons.</div>
-
-                            }
-
-                        </form>
-
-
-                    </div>
-                    }
-
-                    {allImages.length > 0 &&
-                    <button
-                        onClick={deletePicture}
-                    >
-                        verwijder profiel foto
-                    </button>
-                    }
-
-                    {errorDeleteFile &&
-
-                    <div className={styles.warning}>Er is iets fout gegaan bij het verwijderen
-                        Probeer het nog een keer!
-                        Of neem contact op met ons.</div>
-
-                    }
 
 
                 </div>
