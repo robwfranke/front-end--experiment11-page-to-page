@@ -31,7 +31,7 @@ function ProfielData() {
 
 
 
-          <div className={styles.profile}>
+          <div className={styles.profileData}>
               <h3>Profiel gegevens:</h3>
               <div><strong>UserName: </strong>{user}</div>
               <div><strong>Stad: </strong>{city}</div>

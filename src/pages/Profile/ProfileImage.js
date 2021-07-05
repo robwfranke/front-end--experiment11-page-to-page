@@ -4,7 +4,6 @@ import {Link, useHistory} from 'react-router-dom';
 import styles from "./Profile.module.css"
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import {AuthContext} from "../../components/context/AuthContext";
 
 
 function ProfielImage() {
@@ -155,6 +154,7 @@ function ProfielImage() {
 
 
         <>
+        <div className={styles["profileImage"]}>
 
             {allImages.length === 0 &&
             <>
@@ -221,7 +221,7 @@ function ProfielImage() {
 
             }
 
-
+        </div>
         </>
 
     )

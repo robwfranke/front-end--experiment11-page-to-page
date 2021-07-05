@@ -25,18 +25,15 @@ function Profile() {
     const user = decoded.sub;
 
 
-
-    const[newEmail,setNewEmail]=useState("")
-    const[newStreet,setNewStreet]=useState("")
-    const[newCity,setNewCity]=useState("")
-    const[newPostalcode,setnewPostalcode]=useState("")
-    const[newTelnumber,setnewTelnumber]=useState("")
-
+    const [newEmail, setNewEmail] = useState("")
+    const [newStreet, setNewStreet] = useState("")
+    const [newCity, setNewCity] = useState("")
+    const [newPostalcode, setnewPostalcode] = useState("")
+    const [newTelnumber, setnewTelnumber] = useState("")
 
 
     const [changeProfileData, setChangeProfileData] = useState(false)
-   const {errorSubmit2,setErrorSubmit2}=useState(false);
-
+    const {errorSubmit2, setErrorSubmit2} = useState(false);
 
 
     function showUpdateDataProfile() {
@@ -51,7 +48,7 @@ function Profile() {
     function onSubmit2(data) {
 
         console.log("IN onSubmit2")
-        console.log("DATA: ",data)
+        console.log("DATA: ", data)
         // sendFileToBackend();
     }
 
@@ -70,7 +67,7 @@ function Profile() {
 
                 {/************* PROFILE DATA   ***********/}
 
-                <div className={styles.leftColumn}>
+                <div >
 
                     <ProfileData/>
 
@@ -88,7 +85,7 @@ function Profile() {
                 {/*************  PROFILE IMAGE   ***********/}
 
 
-                <div className={styles.centerColumn}>
+                <div>
 
                     <ProfileImage/>
 
@@ -99,12 +96,9 @@ function Profile() {
 
                 {changeProfileData &&
 
-                <div className={styles.rightColumn}>
+                <div >
 
                     <ProfileUpdate/>
-
-
-
 
 
                 </div>
